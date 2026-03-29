@@ -1,13 +1,13 @@
-name: 밀양성모안과 블로그 자동 생성
+name: 안과 리서치 다이제스트
 
 on:
   schedule:
-    # 매주 월·수·금 오전 9시 KST (UTC 00:00)
-    - cron: "0 0 * * 1,3,5"
+    # 매주 화·목·토 오전 7시 KST (UTC 22:00 전날)
+    - cron: "0 22 * * 0,2,4"
   workflow_dispatch: # 수동 실행 허용
 
 jobs:
-  generate-blog:
+  research-digest:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -24,11 +24,11 @@ jobs:
       - name: 의존성 설치
         run: pip install -r requirements.txt
 
-      - name: 블로그 글 생성 및 이메일 발송
+      - name: 논문·기사 다이제스트 생성 및 이메일 발송
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
           TO_EMAIL: ${{ secrets.TO_EMAIL }}
           UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY }}
-        run: python generate_blog.py
+        run: python research_digest.py
